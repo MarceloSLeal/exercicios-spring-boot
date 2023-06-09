@@ -4,7 +4,6 @@ import br.com.marcelo.exerciciossb.model.entities.Produto;
 import br.com.marcelo.exerciciossb.model.repositories.ProdutoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +43,18 @@ public class ProdutoController {
         produtoRepository.save(updateProduto.get());
 
         return updateProduto.get();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirProduto(@Valid @PathVariable int id) {
+
+         if (!produtoRepository.existsById(id)) {
+             return ResponseEntity.notFound().build();
+         }
+
+         produtoRepository.deleteById(id);
+
+         return ResponseEntity.noContent().build();
     }
 
 }
