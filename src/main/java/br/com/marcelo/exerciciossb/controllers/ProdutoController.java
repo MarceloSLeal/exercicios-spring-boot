@@ -4,6 +4,8 @@ import br.com.marcelo.exerciciossb.model.entities.Produto;
 import br.com.marcelo.exerciciossb.model.repositories.ProdutoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -29,6 +31,19 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public Optional<Produto> obterProdutoPorId(@PathVariable int id) {
         return produtoRepository.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Produto alterarProduto(@Valid @PathVariable int id, @RequestBody Produto produto) {
+        Optional<Produto> updateProduto = produtoRepository.findById(id);
+
+        updateProduto.get().setNome(produto.getNome());
+        updateProduto.get().setPreco(produto.getPreco());
+        updateProduto.get().setDesconto(produto.getDesconto());
+
+        produtoRepository.save(updateProduto.get());
+
+        return updateProduto.get();
     }
 
 }
